@@ -1,0 +1,226 @@
+lista_produtos = []
+
+def AdicionarProduto():
+    nome = input("Digite o nome do produto: ")
+    quantidade = int(input("Digite a quantidade de produtos: "))
+    valor = float(input("Digite o valor do produto em R$: "))
+    valorTotal = quantidade * valor
+    produto = {"produto": nome, "valor": valor, "quantidade": quantidade, "total": valorTotal}
+    lista_produtos.append(produto)
+    print("Produto adicionado com sucesso!")
+    VerProdutos()
+    ValorTotalTodosProdutos()
+    return
+
+def VerProdutos():
+    for produto in lista_produtos:
+        print(f"Nome: {produto['produto']}. Quantidade: {produto['quantidade']}. Valor: R${produto['valor']}. Valor deste item: R${produto['total']}")
+    print(f"Valor total de todos os produtos: R${ValorTotalTodosProdutos()}")
+    return
+
+def AtualizarProduto():
+    menuAtualizar = input('''Menu de Atualização de Produtos:
+            1 - Atualizar nome do produto.
+            2 - Atualizar quantidade do produto.
+            3 - Atualizar valor do produto.
+            4 - Atualizar todos os dados do produto.
+            5 - Voltar ao menu principal.
+            6 - Encerrar programa.
+            
+            Digite a opção desejada: 
+            ''')
+    
+    match menuAtualizar:
+        case "1":
+            nome = input("Digite o nome do produto que deseja atualizar: ")
+            for produto in lista_produtos:
+                if produto['produto'] == nome:
+                    novo_nome = input("Digite o novo nome do produto: ")
+                    produto['produto'] = novo_nome
+                    print("Nome atualizado com sucesso.")
+                    VerProdutos()
+                    ValorTotalTodosProdutos()
+                    return
+            print("Produto não encontrado.")
+        
+        case "2":
+            nome = input("Digite o nome do produto que deseja atualizar: ")
+            for produto in lista_produtos:
+                if produto['produto'] == nome:
+                    nova_quantidade = int(input("Digite a nova quantidade do produto: "))
+                    produto['total'] -= produto['quantidade'] * produto['valor']
+                    produto['quantidade'] = nova_quantidade
+                    produto['total'] += nova_quantidade * produto['valor']
+                    print("Quantidade atualizada com sucesso.")
+                    VerProdutos()
+                    ValorTotalTodosProdutos()
+                    return
+            print("Produto não encontrado.")
+            
+        case "3":
+            nome = input("Digite o nome do produto que deseja atualizar: ")
+            for produto in lista_produtos:
+                if produto['produto'] == nome:
+                    novo_valor = float(input("Digite o novo valor do item: "))
+                    produto['valor'] = novo_valor
+                    produto['total'] = produto['quantidade'] * novo_valor
+                    print("Valor atualizado com sucesso.")
+                    VerProdutos()
+                    ValorTotalTodosProdutos()
+                    return
+            print("Produto não encontrado.")
+            
+        case "4":
+            nome = input("Digite o nome do produto que deseja atualizar: ")
+            for produto in lista_produtos:
+                if produto['produto'] == nome:
+                    novo_nome = input("Digite o novo nome do produto: ")
+                    nova_quantidade = int(input("Digite a nova quantidade do produto: "))
+                    novo_valor = float(input("Digite o novo valor do item: "))
+                    produto['produto'] = novo_nome
+                    produto['quantidade'] = nova_quantidade
+                    produto['valor'] = novo_valor
+                    produto['total'] = nova_quantidade * novo_valor
+                    print("Dados atualizados com sucesso.")
+                    VerProdutos()
+                    ValorTotalTodosProdutos()
+                    return
+            print("Produto não encontrado.")
+            
+        case "5":
+            return
+        
+        case "6":
+            print("Programa encerrado.")
+            exit()
+
+        
+        case _:
+            print("Opção inválida.")
+            return
+    return
+
+def RemoverProduto():
+    menuProduto = input('''Menu de Remoção de Produtos:
+            1 - Remover um produto.
+            2 - Remover todos os produtos.
+            3 - Voltar ao menu principal.
+            4 - Encerrar programa.
+            
+            Digite a opção desejada:
+            ''')
+    
+    match menuProduto:
+        case "1":
+            nome = input("Digite o nome do produto que deseja remover: ")
+            for produto in lista_produtos:
+                if produto['produto'] == nome:
+                    menuRemover = input('''Menu de Remoção de Produtos:
+                            1 - Remover um item do carrinho.
+                            2 - Remover mais de um item.
+                            3 - Remover todos os itens deste produto.
+                            
+                            Digite a opção desejada: 
+                            ''')
+                    match menuRemover:
+                        case "1":
+                            produto['quantidade'] -= 1
+                            produto['total'] -= produto['valor']
+                            if produto['quantidade'] <= 0:
+                                lista_produtos.remove(produto)
+                            print("Item removido com sucesso.")
+                            VerProdutos()
+                            ValorTotalTodosProdutos()
+                            return
+                        
+                        case "2":
+                            quantidade = int(input("Digite a quantidade de produtos que deseja remover: "))
+                            if quantidade > produto['quantidade']:
+                                print("Quantidade inválida.")
+                                return
+                            else:
+                                produto['quantidade'] -= quantidade
+                                produto['total'] -= quantidade * produto['valor']
+                                if produto['quantidade'] <= 0:
+                                    lista_produtos.remove(produto)
+                                print("Produto removido com sucesso.")
+                                VerProdutos()
+                                ValorTotalTodosProdutos()
+                                return
+                            
+                        case "3":
+                            lista_produtos.remove(produto)
+                            print("Produto removido com sucesso.")
+                            VerProdutos()
+                            ValorTotalTodosProdutos()
+                            return
+                        
+                        case _:
+                            print("Opção inválida.")
+                            return
+                        
+            print("Produto não encontrado.")
+            return
+        
+        case "2":
+            lista_produtos.clear()
+            print("Todos os produtos foram removidos.")
+            VerProdutos()
+            ValorTotalTodosProdutos()
+            return
+        
+        case "3":
+            return
+        
+        case "4":
+            print("Programa encerrado.")
+            exit()
+        
+        case _:
+            print("Opção inválida.")
+            return
+        
+
+def ValorTotalTodosProdutos():
+    total = 0
+    for produto in lista_produtos:
+        total += produto['total']
+    return total
+
+def menu():
+    escolha = input('''Menu Principal:
+        1 - Adicionar produto.
+        2 - Ver produtos.
+        3 - Atualizar produto.
+        4 - Remover produto.
+        5 - Encerrar programa.
+        
+        Digite a opção desejada: 
+        ''')
+    
+    match escolha:
+        case "1":
+            AdicionarProduto()
+        
+        case "2":
+            VerProdutos()
+        
+        case "3":
+            AtualizarProduto()
+        
+        case "4":
+            RemoverProduto()
+        
+        case "5":
+            print("Programa encerrado.")
+            exit() 
+        
+            
+    
+        case _: 
+            print("Opção inválida.")
+    return True
+
+while True:
+    if not menu():
+        break 
